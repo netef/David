@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    int counter, frequency;
     Animator anim;
     Rigidbody2D rb;
     public float velocity;
@@ -15,17 +17,12 @@ public class PlayerScript : MonoBehaviour
     ParallexScript fourth;
     ParallexScript fifth;
 
-    SpriteRenderer head;
-    SpriteRenderer body;
-    SpriteRenderer sword;
-    SpriteRenderer shield;
-    SpriteRenderer leftLeg;
-    SpriteRenderer rightLeg;
+    public GameObject pacman;
 
-
-    // Start is called before the first frame update
     void Start()
     {
+        counter = 1;
+        frequency = 4;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         facingRight = true;
@@ -36,18 +33,16 @@ public class PlayerScript : MonoBehaviour
         fourth = GameObject.Find("4").GetComponent<ParallexScript>();
         fifth = GameObject.Find("5").GetComponent<ParallexScript>();
 
-        head = GameObject.Find("Head").GetComponent<SpriteRenderer>();
-        body = GameObject.Find("Body").GetComponent<SpriteRenderer>();
-        sword = GameObject.Find("Sword").GetComponent<SpriteRenderer>();
-        shield = GameObject.Find("Shield").GetComponent<SpriteRenderer>();
-        leftLeg = GameObject.Find("Left Leg").GetComponent<SpriteRenderer>();
-        rightLeg = GameObject.Find("Right Leg").GetComponent<SpriteRenderer>();
+        Invoke("MakeEnemy", .01f);
+
+        PlayerPrefs.SetFloat("attackSpeed", .03f);
 
     }
 
-    // Update is called once per frame
     void Update()
     {
+        
+       
         if (Input.GetAxis("Horizontal") != 0)
         {
             anim.SetTrigger("run");
@@ -83,15 +78,8 @@ public class PlayerScript : MonoBehaviour
             if (facingRight)
             {
                 facingRight = false;
-
-                head.flipX = true;
-                body.flipX = true;
-                sword.flipX = true;
-                shield.flipX = true;
-                leftLeg.flipX = true;
-                rightLeg.flipX = true;
+                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             }
-
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -99,13 +87,7 @@ public class PlayerScript : MonoBehaviour
             if (!facingRight)
             {
                 facingRight = true;
-
-                head.flipX = false;
-                body.flipX = false;
-                sword.flipX = false;
-                shield.flipX = false;
-                leftLeg.flipX = false;
-                rightLeg.flipX = false;
+                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             }
 
         }
@@ -115,5 +97,27 @@ public class PlayerScript : MonoBehaviour
             anim.SetTrigger("jump");
             rb.AddForce(new Vector2(0, 1500));
         }
+
+        counter++;
+        if(counter % 1200 == 0 && frequency > 1)
+        {
+            PlayerPrefs.SetFloat("attackSpeed", PlayerPrefs.GetFloat("attackSpeed", .03f) + .03f);
+            frequency--;
+        }
+            
+
+    }
+
+    void MakeEnemy()
+    {
+        int rand = Random.Range(-10, -5);
+        int rand2 = Random.Range(5, 10);
+        int rand3 = Random.Range(0, 2);
+        if (rand3 == 0)
+            Instantiate(pacman, new Vector3(transform.position.x + rand, 3, 0), Quaternion.identity);
+        else
+            Instantiate(pacman, new Vector3(transform.position.x + rand2, 3, 0), Quaternion.identity);
+
+        Invoke("MakeEnemy", frequency);
     }
 }
