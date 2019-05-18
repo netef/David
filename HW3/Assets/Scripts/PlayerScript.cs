@@ -19,6 +19,8 @@ public class PlayerScript : MonoBehaviour
 
     public GameObject pacman;
 
+    public GameObject gameOver;
+
     void Start()
     {
         counter = 1;
@@ -36,6 +38,12 @@ public class PlayerScript : MonoBehaviour
         Invoke("MakeEnemy", .01f);
 
         PlayerPrefs.SetFloat("attackSpeed", .03f);
+        PlayerPrefs.SetInt("gameOver", 0);
+
+        gameOver = GameObject.Find("GameOver");
+        gameOver.SetActive(false);
+
+        PlayerPrefs.SetInt("score", 0);
 
     }
 
