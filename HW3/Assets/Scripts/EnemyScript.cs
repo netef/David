@@ -11,7 +11,6 @@ public class EnemyScript : MonoBehaviour
     TMP_Text score;
     GameObject gameOver;
 
-    // Start is called before the first frame update
     void Start()
     {
         David = GameObject.Find("David");
@@ -19,7 +18,6 @@ public class EnemyScript : MonoBehaviour
         gameOver = GameObject.Find("David").GetComponent<PlayerScript>().gameOver;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PlayerPrefs.GetInt("gameOver", 0) == 0)
@@ -39,7 +37,6 @@ public class EnemyScript : MonoBehaviour
         }
         else if (collision.gameObject.name.Equals("David"))
         {
-            Destroy(collision.gameObject);
             GameOver();
         }
     }
