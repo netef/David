@@ -55,22 +55,11 @@ public class PlayerScript : MonoBehaviour
             if (Input.GetAxis("Horizontal") != 0)
             {
                 anim.SetTrigger("run");
-                if (facingRight)
-                {
-                    first.velocity = 0.01f;
-                    second.velocity = 0.03f;
-                    third.velocity = 0.06f;
-                    fourth.velocity = 0.1f;
-                    fifth.velocity = 0.2f;
-                }
-                else
-                {
-                    first.velocity = -0.01f;
-                    second.velocity = -0.03f;
-                    third.velocity = -0.06f;
-                    fourth.velocity = -0.1f;
-                    fifth.velocity = -0.2f;
-                }
+                first.velocity = 0.01f * Input.GetAxis("Horizontal");
+                second.velocity = 0.03f * Input.GetAxis("Horizontal");
+                third.velocity = 0.06f * Input.GetAxis("Horizontal");
+                fourth.velocity = 0.1f * Input.GetAxis("Horizontal");
+                fifth.velocity = 0.2f * Input.GetAxis("Horizontal");
             }
             else
             {
@@ -82,22 +71,16 @@ public class PlayerScript : MonoBehaviour
                 fifth.velocity = 0;
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && facingRight)
             {
-                if (facingRight)
-                {
-                    facingRight = false;
-                    transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-                }
+                facingRight = false;
+                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && !facingRight)
             {
-                if (!facingRight)
-                {
                     facingRight = true;
                     transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-                }
 
             }
 
